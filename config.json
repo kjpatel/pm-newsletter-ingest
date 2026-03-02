@@ -13,6 +13,11 @@
       "name": "Lenny's Newsletter",
       "url": "https://www.lennysnewsletter.com/feed",
       "seen_file": "seen_lennys.json"
+    },
+    {
+      "name": "Product Compass",
+      "url": "https://www.productcompass.pm/feed",
+      "seen_file": "seen_product_compass.json"
     }
   ]
 }
