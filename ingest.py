@@ -67,12 +67,16 @@ def fetch_feed(feed_url: str) -> list[dict]:
     articles = []
     for entry in feed.entries:
         published = ""
+        published_iso = ""
         if hasattr(entry, "published_parsed") and entry.published_parsed:
-            published = datetime(*entry.published_parsed[:6]).strftime("%b %d, %Y")
+            dt = datetime(*entry.published_parsed[:6])
+            published = dt.strftime("%b %d, %Y")
+            published_iso = dt.strftime("%Y-%m-%d")
         articles.append({
             "title": entry.get("title", "Untitled"),
             "url": entry.get("link", ""),
             "published": published,
+            "published_iso": published_iso,
             "description": entry.get("summary", ""),
         })
     log.info(f"Found {len(articles)} articles in feed")
@@ -133,10 +137,10 @@ def generate_summary(
     client: anthropic.Anthropic,
     model: str,
     feed_name: str,
+    feed_author: str,
     title: str,
     content: str,
     published: str,
-    categories: list[str],
     existing_notes: list[str],
 ) -> dict:
     """Use Claude to generate a structured summary."""
@@ -144,20 +148,13 @@ def generate_summary(
 
     prompt = f"""Analyze this article and return a JSON object with these fields:
 
-1. "category": Classify into exactly one of: {json.dumps(categories)}
-   - "AI PM" = articles about PM practices, frameworks, pricing, evals for AI products
-   - "AI Update" = AI tool guides, product updates, how-to guides for specific AI tools
-   - "Getting a PM Job" = career advice, job search, interview prep, portfolio building
-   - "Product Growth Podcast" = podcast episodes from Product Growth newsletter (Aakash Gupta)
-   - "Lenny's Podcast" = podcast episodes or articles from Lenny's Newsletter (Lenny Rachitsky)
+1. "summary": A 1-2 sentence summary of the article's core argument.
 
-2. "summary": A 1-2 sentence summary of the article's core argument.
+2. "takeaways": An array of 3-5 key takeaway strings. Each should be actionable and specific. Start each with a bolded phrase.
 
-3. "takeaways": An array of 3-5 key takeaway strings. Each should be actionable and specific. Start each with a bolded phrase.
+3. "author": The default author of this feed is {feed_author}. Use this unless the article features a guest, in which case use "{feed_author} (featuring Guest Name)".
 
-4. "author": The author or guest name (e.g. "Lenny Rachitsky" or "Lenny Rachitsky (featuring Guest Name)")
-
-5. "related": An array of 2-3 filenames from the existing notes list below that are most related to this article. Use exact filenames.
+4. "related": An array of 2-3 filenames from the existing notes list below that are most related to this article. Use exact filenames.
 
 This article is from: {feed_name}
 
@@ -254,23 +251,21 @@ def process_feed(
                 client=client,
                 model=config["model"],
                 feed_name=feed_name,
+                feed_author=feed_config.get("author", "Unknown"),
                 title=article["title"],
                 content=content,
                 published=article["published"],
-                categories=config["categories"],
                 existing_notes=existing_notes,
             )
 
-            # Determine output path
-            category = result.get("category", "AI Update")
-            if category not in config["categories"]:
-                category = "AI Update"
+            # Determine output path — one directory per feed
+            feed_dir = vault_cs / feed_name
+            feed_dir.mkdir(parents=True, exist_ok=True)
 
-            category_dir = vault_cs / category
-            category_dir.mkdir(parents=True, exist_ok=True)
-
-            filename = sanitize_filename(article["title"]) + ".md"
-            note_path = category_dir / filename
+            date_prefix = article.get("published_iso", "")
+            title_part = sanitize_filename(article["title"])
+            filename = f"{date_prefix} {title_part}.md" if date_prefix else f"{title_part}.md"
+            note_path = feed_dir / filename
 
             # Write note
             note_content = format_note(

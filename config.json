@@ -1,23 +1,97 @@
 {
   "vault_path": "/Users/kushan/Obsidian Vaults/Kush-Personal-Sync",
-  "case_studies_path": "🎯 PM Craft/Case Studies",
-  "categories": ["AI PM", "AI Update", "Getting a PM Job", "Product Growth Podcast", "Lenny's Podcast"],
+  "case_studies_path": "🎯 PM Craft/Reading Notes",
   "model": "claude-haiku-4-5-20251001",
   "feeds": [
     {
       "name": "Product Growth",
       "url": "https://www.news.aakashg.com/feed",
-      "seen_file": "seen_product_growth.json"
+      "seen_file": "seen_product_growth.json",
+      "author": "Aakash Gupta"
     },
     {
       "name": "Lenny's Newsletter",
       "url": "https://www.lennysnewsletter.com/feed",
-      "seen_file": "seen_lennys.json"
+      "seen_file": "seen_lennys.json",
+      "author": "Lenny Rachitsky"
     },
     {
       "name": "Product Compass",
       "url": "https://www.productcompass.pm/feed",
-      "seen_file": "seen_product_compass.json"
+      "seen_file": "seen_product_compass.json",
+      "author": "Pawel Huryn"
+    },
+    {
+      "name": "The Looking Glass",
+      "url": "https://lg.substack.com/feed",
+      "seen_file": "seen_looking_glass.json",
+      "author": "Julie Zhuo"
+    },
+    {
+      "name": "Brian Balfour",
+      "url": "https://blog.brianbalfour.com/feed",
+      "seen_file": "seen_brian_balfour.json",
+      "author": "Brian Balfour"
+    },
+    {
+      "name": "Shreyas Doshi",
+      "url": "https://shreyasdoshi.substack.com/feed",
+      "seen_file": "seen_shreyas_doshi.json",
+      "author": "Shreyas Doshi"
+    },
+    {
+      "name": "Elena's Growth Scoop",
+      "url": "https://www.elenaverna.com/feed",
+      "seen_file": "seen_elena_verna.json",
+      "author": "Elena Verna"
+    },
+    {
+      "name": "The Beautiful Mess",
+      "url": "https://cutlefish.substack.com/feed",
+      "seen_file": "seen_cutlefish.json",
+      "author": "John Cutler"
+    },
+    {
+      "name": "Perspectives (Deb Liu)",
+      "url": "https://debliu.substack.com/feed",
+      "seen_file": "seen_deb_liu.json",
+      "author": "Deb Liu"
+    },
+    {
+      "name": "Department of Product",
+      "url": "https://departmentofproduct.substack.com/feed",
+      "seen_file": "seen_department_of_product.json",
+      "author": "Rich Holmes"
+    },
+    {
+      "name": "Casey Accidental",
+      "url": "https://www.caseyaccidental.com/feed",
+      "seen_file": "seen_casey_winters.json",
+      "author": "Casey Winters"
+    },
+    {
+      "name": "Wes Kao",
+      "url": "https://newsletter.weskao.com/feed",
+      "seen_file": "seen_wes_kao.json",
+      "author": "Wes Kao"
+    },
+    {
+      "name": "SVPG",
+      "url": "https://www.svpg.com/feed/",
+      "seen_file": "seen_svpg.json",
+      "author": "Marty Cagan"
+    },
+    {
+      "name": "Itamar Gilad",
+      "url": "https://itamargilad.com/feed",
+      "seen_file": "seen_itamar_gilad.json",
+      "author": "Itamar Gilad"
+    },
+    {
+      "name": "Stratechery",
+      "url": "https://stratechery.com/feed/",
+      "seen_file": "seen_stratechery.json",
+      "author": "Ben Thompson"
     }
   ]
 }
