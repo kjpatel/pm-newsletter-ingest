@@ -97,6 +97,36 @@
       "url": "https://stratechery.com/feed/",
       "seen_file": "seen_stratechery.json",
       "author": "Ben Thompson"
+    },
+    {
+      "name": "Sequoia Capital",
+      "url": "https://sequoiacap.com/feed/",
+      "seen_file": "seen_sequoia.json",
+      "author": "Sequoia Capital"
+    },
+    {
+      "name": "Both Sides of the Table",
+      "url": "https://bothsidesofthetable.com/feed",
+      "seen_file": "seen_mark_suster.json",
+      "author": "Mark Suster"
+    },
+    {
+      "name": "Feld Thoughts",
+      "url": "https://feld.com/feed/",
+      "seen_file": "seen_brad_feld.json",
+      "author": "Brad Feld"
+    },
+    {
+      "name": "Hunter Walk",
+      "url": "https://hunterwalk.com/feed/",
+      "seen_file": "seen_hunter_walk.json",
+      "author": "Hunter Walk"
+    },
+    {
+      "name": "Tomasz Tunguz",
+      "url": "https://tomtunguz.com/index.xml",
+      "seen_file": "seen_tomasz_tunguz.json",
+      "author": "Tomasz Tunguz"
     }
   ]
 }
