@@ -21,6 +21,13 @@ Built for product managers who want to stay on top of industry content without t
   Obsidian    ──► │  Collect Week's Notes ──► Claude AI  │  ──► Email Digest
   Notes           │                          Ranking     │
                   └─────────────────────────────────────┘
+
+                  ┌─────────────────────────────────────┐
+                  │    Weekly: digest_cloud.py           │
+                  │    (GitHub Actions)                  │
+  RSS Feeds ──►   │  Fetch + Summarize ──► Claude AI    │  ──► Email Digest
+  (20 sources)    │                        Ranking      │
+                  └─────────────────────────────────────┘
 ```
 
 ### Article Ingestion (`ingest.py`)
@@ -32,13 +39,23 @@ Built for product managers who want to stay on top of industry content without t
 5. Writes a formatted markdown note to the appropriate Obsidian vault folder
 6. Tracks processed articles to prevent duplicates
 
-### Weekly Digest (`digest.py`)
+### Weekly Digest — Local (`digest.py`)
 
 1. Scans the Obsidian vault for all article notes from the past 7 days
 2. Parses each note to extract title, author, date, source, summary, and key takeaways
 3. Calls Claude to rank all articles by strategic relevance (tailored to your role/priorities)
 4. Generates a digest with a "Must-Read" section (top 3) and a full ranked list
 5. Saves the digest as an Obsidian note and sends it as a styled HTML email via Resend
+
+### Weekly Digest — Cloud (`digest_cloud.py`)
+
+A self-contained version that runs in GitHub Actions with no local dependencies:
+
+1. Fetches all 20 RSS feeds and filters to articles from the past 7 days
+2. Fetches full article content and generates summaries via Claude
+3. Ranks all articles by strategic relevance
+4. Sends a styled HTML digest email via Resend
+5. Runs automatically every Saturday via GitHub Actions cron
 
 ## AI Features
 
@@ -257,6 +274,16 @@ crontab -e
 # Weekly digest on Mondays at 9am
 0 9 * * 1 cd /path/to/pm-newsletter-ingest && .venv/bin/python3 digest.py >> logs/digest.log 2>&1
 ```
+
+### GitHub Actions (cloud digest)
+
+The cloud digest runs automatically via GitHub Actions — no local machine required.
+
+1. Push this repo to GitHub
+2. Add repository secrets in **Settings > Secrets and variables > Actions**:
+   - `ANTHROPIC_API_KEY`
+   - `RESEND_API_KEY`
+3. The workflow runs every Saturday at 9am ET (2pm UTC). You can also trigger it manually from the **Actions** tab.
 
 ## Cost
 
