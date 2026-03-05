@@ -16,13 +16,6 @@ Built for product managers who want to stay on top of industry content without t
                   └─────────────────────────────────────┘
 
                   ┌─────────────────────────────────────┐
-                  │         Weekly: digest.py            │
-                  │                                      │
-  Obsidian    ──► │  Collect Week's Notes ──► Claude AI  │  ──► Email Digest
-  Notes           │                          Ranking     │
-                  └─────────────────────────────────────┘
-
-                  ┌─────────────────────────────────────┐
                   │    Weekly: digest_cloud.py           │
                   │    (GitHub Actions)                  │
   RSS Feeds ──►   │  Fetch + Summarize ──► Claude AI    │  ──► Email Digest
@@ -39,17 +32,9 @@ Built for product managers who want to stay on top of industry content without t
 5. Writes a formatted markdown note to the appropriate Obsidian vault folder
 6. Tracks processed articles to prevent duplicates
 
-### Weekly Digest — Local (`digest.py`)
+### Weekly Digest (`digest_cloud.py`)
 
-1. Scans the Obsidian vault for all article notes from the past 7 days
-2. Parses each note to extract title, author, date, source, summary, and key takeaways
-3. Calls Claude to rank all articles by strategic relevance (tailored to your role/priorities)
-4. Generates a digest with a "Must-Read" section (top 3) and a full ranked list
-5. Saves the digest as an Obsidian note and sends it as a styled HTML email via Resend
-
-### Weekly Digest — Cloud (`digest_cloud.py`)
-
-A self-contained version that runs in GitHub Actions with no local dependencies:
+Runs in GitHub Actions with no local dependencies:
 
 1. Fetches all 20 RSS feeds and filters to articles from the past 7 days
 2. Fetches full article content and generates summaries via Claude
@@ -147,7 +132,7 @@ The digest arrives as a styled email with:
 - Python 3.10+
 - An [Anthropic API key](https://console.anthropic.com/)
 - An Obsidian vault
-- A [Resend API key](https://resend.com/) (optional, for email digest)
+- A [Resend API key](https://resend.com/) (for email digest, configured as GitHub Actions secret)
 
 ### Install
 
@@ -201,8 +186,8 @@ source .venv/bin/activate
 # Ingest new articles
 python3 ingest.py
 
-# Generate and email weekly digest
-python3 digest.py
+# Weekly digest runs automatically via GitHub Actions
+# Or trigger manually from the Actions tab on GitHub
 ```
 
 ## Adding Feeds
@@ -256,13 +241,10 @@ Create plist files at `~/Library/LaunchAgents/`:
 </plist>
 ```
 
-**Weekly digest** (`com.newsletter-digest.plist`) — same structure, with a `Weekday` key (e.g., `1` for Monday).
-
-Then load them:
+Then load it:
 
 ```bash
 launchctl load ~/Library/LaunchAgents/com.newsletter-ingest.plist
-launchctl load ~/Library/LaunchAgents/com.newsletter-digest.plist
 ```
 
 ### Linux (cron)
@@ -271,8 +253,6 @@ launchctl load ~/Library/LaunchAgents/com.newsletter-digest.plist
 crontab -e
 # Daily ingestion at 8am
 0 8 * * * cd /path/to/pm-newsletter-ingest && .venv/bin/python3 ingest.py >> logs/ingest.log 2>&1
-# Weekly digest on Mondays at 9am
-0 9 * * 1 cd /path/to/pm-newsletter-ingest && .venv/bin/python3 digest.py >> logs/digest.log 2>&1
 ```
 
 ### GitHub Actions (cloud digest)
