@@ -8,16 +8,16 @@ Built for product managers who want to stay on top of industry content without t
 
 ```
                   ┌─────────────────────────────────────┐
-                  │         Daily: ingest.py             │
-                  │                                      │
-  RSS Feeds ──►   │  Fetch Article ──► Claude AI ──►     │  ──► Obsidian Notes
-  (20 sources)    │                    Summary +         │
-                  │                    Takeaways         │
+                  │         Daily: ingest.py            │
+                  │                                     │
+  RSS Feeds ──►   │  Fetch Article ──► Claude AI ──►    │  ──► Obsidian Notes
+  (20 sources)    │                    Summary +        │
+                  │                    Takeaways        │
                   └─────────────────────────────────────┘
 
                   ┌─────────────────────────────────────┐
-                  │    Weekly: digest_cloud.py           │
-                  │    (GitHub Actions)                  │
+                  │    Weekly: digest_cloud.py          │
+                  │    (GitHub Actions)                 │
   RSS Feeds ──►   │  Fetch + Summarize ──► Claude AI    │  ──► Email Digest
   (20 sources)    │                        Ranking      │
                   └─────────────────────────────────────┘
