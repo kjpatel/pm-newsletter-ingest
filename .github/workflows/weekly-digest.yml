@@ -19,20 +19,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Run ingest first to ensure notes are up to date
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python ingest_cloud.py
+
       - name: Run cloud digest
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: python digest_cloud.py
 
-      - name: Commit digest note
+      - name: Commit notes and digest
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add notes/Digests/
+          git add notes/ seen_*.json
           if git diff --cached --quiet; then
-            echo "No digest to commit"
+            echo "No new content to commit"
           else
-            git commit -m "digest: $(date -u +%Y-%m-%d) weekly digest"
+            git commit -m "digest: $(date -u +%Y-%m-%d) weekly ingest + digest"
             git push
           fi
