@@ -3,7 +3,9 @@
 One-time backfill script: generates notes for all articles in seen_*.json
 that don't already have a corresponding note in notes/.
 
-Safe to run multiple times — skips any article that already has a note.
+Only processes articles still in the current RSS feed and published within
+the last 30 days. Safe to run multiple times — skips any article that
+already has a note.
 """
 
 import json
@@ -228,6 +230,8 @@ def main():
     existing_notes = get_existing_note_titles()
     log.info(f"Found {len(existing_urls)} existing notes in notes/")
 
+    cutoff = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+
     total_missing = 0
     total_processed = 0
     total_skipped = 0
@@ -261,8 +265,6 @@ def main():
 
         # Only backfill articles still in the current RSS feed (i.e., recent).
         # Old articles that have fallen off the feed are skipped.
-        cutoff = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
-
         for url in missing_urls:
             article = rss_articles.get(url)
             if not article:
