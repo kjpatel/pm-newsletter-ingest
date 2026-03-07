@@ -5,7 +5,7 @@
   "digest_email": {
     "enabled": true,
     "from": "PM Digest <pm-newsletter-digest@nyxworks.ai>",
-    "to": ["kushan.patel@gmail.com"]
+    "to": ["kushan.patel@gmail.com", "neal.vora@gmail.com", "mnanavati@gmail.com"]
   },
   "feeds": [
     {
