@@ -111,12 +111,6 @@
       "author": "Mark Suster"
     },
     {
-      "name": "Feld Thoughts",
-      "url": "https://feld.com/feed/",
-      "seen_file": "seen_brad_feld.json",
-      "author": "Brad Feld"
-    },
-    {
       "name": "Hunter Walk",
       "url": "https://hunterwalk.com/feed/",
       "seen_file": "seen_hunter_walk.json",
