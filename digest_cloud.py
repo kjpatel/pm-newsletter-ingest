@@ -218,7 +218,7 @@ Sort by rank (1 first). Return ONLY valid JSON, no markdown fences or other text
     log.info(f"Ranking {len(articles)} articles...")
     response = client.messages.create(
         model=model,
-        max_tokens=2048,
+        max_tokens=4096,
         messages=[{"role": "user", "content": prompt}],
     )
 
@@ -588,8 +588,11 @@ def main():
     digest_path.write_text(digest_content, encoding="utf-8")
     log.info(f"Saved digest: {digest_path.relative_to(SCRIPT_DIR)}")
 
-    # Send email
-    send_digest_email(config, digest_content, week_end)
+    # Send email (skip if SKIP_EMAIL is set, e.g. for local regen)
+    if not os.environ.get("SKIP_EMAIL"):
+        send_digest_email(config, digest_content, week_end)
+    else:
+        log.info("SKIP_EMAIL set — skipping email send")
     log.info("Done.")
 
 
