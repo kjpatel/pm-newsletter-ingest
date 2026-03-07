@@ -202,7 +202,17 @@ python -m pytest tests/ -v
 
 ## Cost
 
-Uses Claude Haiku (~$0.01-0.03 per article). A typical daily run processing 2-3 new articles costs under $0.10. The weekly digest reuses cached summaries from the daily ingest, so it typically only makes 1 API call for ranking.
+All API calls use **Claude Haiku 4.5** ($1/MTok input, $5/MTok output).
+
+| Operation | Input tokens | Output tokens | Est. cost |
+|-----------|-------------|---------------|-----------|
+| Summarize 1 article | ~3,000–5,000 (article + prompt) | ~300–500 (JSON summary) | ~$0.005–0.008 |
+| Daily ingest (2–3 articles) | ~10,000–15,000 | ~1,000–1,500 | ~$0.02 |
+| Weekly ranking (1 API call) | ~6,000–8,000 (all summaries) | ~2,000–3,000 (ranked JSON) | ~$0.02–0.03 |
+
+The weekly digest reuses cached summaries from the daily ingest, so it typically only makes 1 API call for ranking. Uncached articles (new feeds, missed days) are summarized on demand.
+
+**Estimated monthly cost: ~$0.50–0.80** for 19 feeds.
 
 ## License
 
