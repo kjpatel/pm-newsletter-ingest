@@ -111,6 +111,10 @@ Each article receives a relevance phrase explaining why it matters, and the top 
 | 18 | [Hunter Walk](https://hunterwalk.com) | Hunter Walk |
 | 19 | [Tomasz Tunguz](https://tomtunguz.com) | Tomasz Tunguz |
 
+## Project Structure
+
+The repo doubles as the data store — `notes/` and `seen/` contain generated content and are committed by GitHub Actions on each run. This is a deliberate design choice: the repo is the single source of truth, and the local sync script simply pulls it.
+
 ## Setup
 
 ### Prerequisites
@@ -178,6 +182,13 @@ Add any Substack newsletter (or any RSS feed) to the `feeds` array in `config.js
   "author": "Author Name",
   "seen_file": "seen_newsletter_name.json"
 }
+```
+
+## Tests
+
+```bash
+pip install pytest
+python -m pytest tests/ -v
 ```
 
 ## Cost

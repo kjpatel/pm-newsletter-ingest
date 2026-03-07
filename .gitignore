@@ -3,3 +3,4 @@
 .envrc
 logs/
 __pycache__/
+.pytest_cache/
