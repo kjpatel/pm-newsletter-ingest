@@ -211,6 +211,7 @@ Return a JSON array where each element has:
 - "rank": 1 = most relevant
 - "relevance": A single phrase explaining why this matters to a VP of Product
 - "must_read": boolean, true only for the top 3 most actionable articles
+- "expanded_summary": ONLY for the top 3 must-read articles, provide a 3-4 sentence expanded summary that gives a VP enough context to understand the core argument and why it matters without reading the full article. For non-must-read articles, omit this field.
 
 Sort by rank (1 first). Return ONLY valid JSON, no markdown fences or other text."""
 
@@ -328,61 +329,64 @@ def format_digest(
     feeds: list[dict] | None = None,
 ) -> str:
     """Format the ranked digest as markdown."""
-    feed_homepages = build_feed_homepage_map(feeds) if feeds else {}
-
     feed_counts = {}
     for a in articles:
         name = a.get("feed_name", "Unknown")
         feed_counts[name] = feed_counts.get(name, 0) + 1
 
     lines = [
-        f"# Weekly PM Digest - {week_end}",
+        f"# Weekly PM Digest — {week_end}",
         "",
-        f"**{len(articles)} new articles** from {len(feed_counts)} feeds ({week_start} – {week_end})",
+        f"{len(articles)} articles from {len(feed_counts)} feeds | {week_start} – {week_end}",
         "",
-        "| Feed | Count |",
-        "|------|-------|",
     ]
-    for feed, count in sorted(feed_counts.items()):
-        homepage = feed_homepages.get(feed, "")
-        feed_cell = f"[{feed}]({homepage})" if homepage else feed
-        lines.append(f"| {feed_cell} | {count} |")
-    lines.append("")
 
-    # Must-reads
+    # Must-reads — expanded treatment
     must_reads = [r for r in ranking if r.get("must_read")]
     if must_reads:
         lines.extend(["---", "", "## Must-Read", ""])
         for r in must_reads:
             a = articles[r["index"]]
             title_link = f"[{a['title']}]({a['url']})" if a.get("url") else a["title"]
+            summary = r.get("expanded_summary") or a["summary"]
             entry = [
                 f"### {r['rank']}. {title_link}",
-                f"*{a.get('feed_name', '')}* | {a.get('author', '')} | {a.get('date', '')}",
-                f"> {a['summary']}",
+                f"*{a.get('feed_name', '')}* — {a.get('author', '')} — {a.get('date', '')}",
+                "",
+                summary,
+                "",
+                f"**Why it matters**: {r.get('relevance', '')}",
+                "",
             ]
-            takeaways = a.get("takeaways", [])
-            if takeaways:
-                entry.append("**Key Takeaways**:")
-                for t in takeaways:
-                    entry.append(f"  {t}")
-            entry.extend([f"**Why it matters**: {r.get('relevance', '')}", ""])
+            for t in a.get("takeaways", []):
+                entry.append(t)
+            entry.extend([
+                "",
+                f"[Read article →]({a.get('url', '')})",
+                "",
+                "---",
+                "",
+            ])
             lines.extend(entry)
 
-    # Full ranked list
-    lines.extend(["---", "", "## All Articles (Ranked)", ""])
-    for r in ranking:
-        a = articles[r["index"]]
-        tag = " **MUST-READ**" if r.get("must_read") else ""
-        title_link = f"[{a['title']}]({a['url']})" if a.get("url") else a["title"]
-        entry = [
-            f"{r['rank']}. {title_link} - *{a.get('feed_name', '')}*{tag}",
-            f"   {a['summary']}",
-        ]
-        for t in a.get("takeaways", []):
-            entry.append(f"   {t}")
-        entry.append("")
-        lines.extend(entry)
+    # All other articles
+    non_must_reads = [r for r in ranking if not r.get("must_read")]
+    if non_must_reads:
+        lines.extend(["## All Articles", ""])
+        for r in non_must_reads:
+            a = articles[r["index"]]
+            title_link = f"[{a['title']}]({a['url']})" if a.get("url") else a["title"]
+            date = a.get("date", "")
+            entry = [
+                f"**{r['rank']}.** {title_link} — *{a.get('feed_name', '')}*{' · ' + date if date else ''}",
+                "",
+                a["summary"],
+                "",
+            ]
+            for t in a.get("takeaways", []):
+                entry.append(t)
+            entry.append("")
+            lines.extend(entry)
 
     return "\n".join(lines) + "\n"
 
@@ -396,88 +400,56 @@ def markdown_to_html(md: str) -> str:
     """Convert digest markdown to simple HTML for email."""
     lines = md.splitlines()
     html_parts = []
-    in_table = False
 
     for line in lines:
         stripped = line.strip()
 
         if stripped == "---":
-            if in_table:
-                html_parts.append("</table>")
-                in_table = False
-            html_parts.append("<hr>")
+            html_parts.append('<hr style="border:none;border-top:1px solid #e0e0e0;margin:24px 0;">')
             continue
 
-        if re.match(r"^\|[-| ]+\|$", stripped):
+        if not stripped:
             continue
-
-        if stripped.startswith("|") and stripped.endswith("|"):
-            cells = [c.strip() for c in stripped.strip("|").split("|")]
-            if not in_table:
-                html_parts.append('<table style="border-collapse:collapse;margin:10px 0;">')
-                tag = "th"
-                in_table = True
-            else:
-                tag = "td"
-            row = "".join(
-                f'<{tag} style="border:1px solid #ddd;padding:6px 12px;">{_md_links(c)}</{tag}>'
-                for c in cells
-            )
-            html_parts.append(f"<tr>{row}</tr>")
-            continue
-
-        if in_table:
-            html_parts.append("</table>")
-            in_table = False
 
         if stripped.startswith("### "):
             text = _md_links(stripped[4:])
-            html_parts.append(f"<h3>{text}</h3>")
+            html_parts.append(f'<h3 style="margin-bottom:4px;">{text}</h3>')
         elif stripped.startswith("## "):
-            html_parts.append(f"<h2>{stripped[3:]}</h2>")
+            html_parts.append(f'<h2 style="margin-top:28px;">{stripped[3:]}</h2>')
         elif stripped.startswith("# "):
             html_parts.append(f"<h1>{stripped[2:]}</h1>")
+        elif stripped.startswith("- "):
+            text = stripped[2:]
+            text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+            html_parts.append(
+                f'<p style="margin-left:20px;margin-top:2px;margin-bottom:2px;color:#444;">'
+                f"&bull; {text}</p>"
+            )
         elif stripped.startswith("> "):
             html_parts.append(
                 f'<blockquote style="border-left:3px solid #ccc;padding-left:12px;'
                 f'color:#555;margin:5px 0;">{stripped[2:]}</blockquote>'
             )
+        elif re.match(r"^\[Read article", stripped):
+            text = _md_links(stripped)
+            html_parts.append(f'<p style="margin-top:12px;">{text}</p>')
+        elif stripped.startswith("**") and ".**" in stripped and stripped[2:3].isdigit():
+            # Article header line: **4.** [Title](url) — *Feed* · Date
+            text = _md_links(stripped)
+            text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+            text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", text)
+            html_parts.append(f'<p style="margin-top:20px;margin-bottom:4px;">{text}</p>')
         elif stripped.startswith("**") and "**:" in stripped:
             text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", stripped)
             html_parts.append(f"<p>{text}</p>")
-        elif re.match(r"^\d+\.", stripped):
+        elif stripped.startswith("*") and not stripped.startswith("**"):
+            text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", stripped)
+            html_parts.append(f"<p style='color:#666;margin-top:0;'>{text}</p>")
+        else:
             text = _md_links(stripped)
             text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
             text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", text)
             html_parts.append(f"<p>{text}</p>")
-        elif stripped.startswith("*") and not stripped.startswith("**"):
-            text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", stripped)
-            html_parts.append(f"<p style='color:#666;'>{text}</p>")
-        elif line.startswith("  ") and stripped.startswith("- "):
-            text = stripped[2:]
-            text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
-            html_parts.append(
-                f"<p style='margin-left:20px;margin-top:2px;margin-bottom:2px;color:#444;'>"
-                f"&bull; {text}</p>"
-            )
-        elif line.startswith("   ") and stripped:
-            if stripped.startswith("- "):
-                text = stripped[2:]
-                text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
-                html_parts.append(
-                    f"<p style='margin-left:20px;margin-top:2px;margin-bottom:2px;color:#444;'>"
-                    f"&bull; {text}</p>"
-                )
-            else:
-                html_parts.append(f"<p style='margin-left:20px;color:#444;'>{stripped}</p>")
-        elif not stripped:
-            continue
-        else:
-            text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", stripped)
-            html_parts.append(f"<p>{text}</p>")
-
-    if in_table:
-        html_parts.append("</table>")
 
     body = "\n".join(html_parts)
     return (
