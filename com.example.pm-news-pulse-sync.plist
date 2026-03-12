@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.yourname.product-growth-sync</string>
+    <string>com.yourname.pm-news-pulse-sync</string>
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
-        <string>/path/to/product-growth-ingest/sync_to_vault.sh</string>
+        <string>/path/to/pm-news-pulse/sync_to_vault.sh</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/path/to/product-growth-ingest</string>
+    <string>/path/to/pm-news-pulse</string>
     <key>RunAtLoad</key>
     <true/>
     <key>StartCalendarInterval</key>
@@ -21,8 +21,8 @@
         <integer>0</integer>
     </dict>
     <key>StandardOutPath</key>
-    <string>/path/to/product-growth-ingest/logs/sync.log</string>
+    <string>/path/to/pm-news-pulse/logs/sync.log</string>
     <key>StandardErrorPath</key>
-    <string>/path/to/product-growth-ingest/logs/sync-error.log</string>
+    <string>/path/to/pm-news-pulse/logs/sync-error.log</string>
 </dict>
 </plist>

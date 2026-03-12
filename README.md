@@ -1,4 +1,4 @@
-# PM Newsletter Auto-Ingest
+# PM News Pulse
 
 Automatically fetches new articles from 19 PM and VC newsletters, generates AI-powered summaries and key takeaways using Claude, and delivers them as organized Obsidian notes and a ranked weekly email digest.
 
@@ -128,8 +128,8 @@ The repo doubles as the data store — `notes/` and `seen/` contain generated co
 ### Install
 
 ```bash
-git clone https://github.com/kjpatel/pm-newsletter-ingest.git
-cd pm-newsletter-ingest
+git clone https://github.com/kjpatel/pm-news-pulse.git
+cd pm-news-pulse
 
 python3 -m venv .venv
 source .venv/bin/activate
@@ -159,15 +159,15 @@ Install the launchd agent to sync cloud-ingested notes into your Obsidian vault:
 1. Copy the template and replace the placeholder paths with your own:
 
 ```bash
-cp com.example.product-growth-sync.plist com.yourname.product-growth-sync.plist
+cp com.example.pm-news-pulse-sync.plist com.yourname.pm-news-pulse-sync.plist
 # Edit the file to set your repo path and label
 ```
 
 2. Install and load the agent:
 
 ```bash
-cp com.yourname.product-growth-sync.plist ~/Library/LaunchAgents/
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.yourname.product-growth-sync.plist
+cp com.yourname.pm-news-pulse-sync.plist ~/Library/LaunchAgents/
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.yourname.pm-news-pulse-sync.plist
 ```
 
 The agent runs daily at 9am and on login/wake. It pulls the repo and rsyncs `notes/` into your vault.
