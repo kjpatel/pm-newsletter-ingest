@@ -104,6 +104,80 @@ def fetch_article_content(url: str) -> str:
     return text
 
 
+def _normalize_title(title: str) -> str:
+    """Normalize a title for deduplication comparison."""
+    # Remove emoji and special unicode characters
+    t = re.sub(r"[^\w\s]", "", title)
+    # Collapse whitespace and lowercase
+    t = re.sub(r"\s+", " ", t).strip().lower()
+    return t
+
+
+def _is_podcast(title: str) -> bool:
+    """Check if a title indicates a podcast/audio episode."""
+    t = title.lower()
+    return bool(re.search(r"\bpodcast\b|🎙️|🎧|this week on\b", t))
+
+
+def _deduplicate_articles(articles: list[dict]) -> list[dict]:
+    """Remove duplicate articles based on title similarity.
+
+    Handles two cases:
+    - Exact normalized title match (e.g. same article at different URLs)
+    - One title containing another (e.g. podcast announcement wrapping
+      the full article title like "This week on X: <full title>")
+
+    When choosing which to keep, favors articles over podcasts.
+    """
+    kept: list[dict] = []
+    seen_normalized: list[tuple[str, int]] = []  # (normalized_title, index in kept)
+
+    for article in articles:
+        norm = _normalize_title(article["title"])
+        is_dup = False
+
+        for seen_norm, seen_idx in seen_normalized:
+            # Exact match
+            if norm == seen_norm:
+                is_dup = True
+                break
+            # Substring containment — shorter must be ≥60% of longer to avoid
+            # false positives on very short common substrings
+            shorter, longer = sorted([norm, seen_norm], key=len)
+            if shorter in longer and len(shorter) >= len(longer) * 0.6:
+                is_dup = True
+                existing = kept[seen_idx]
+                # Favor articles over podcasts; if same type, keep shorter title
+                existing_is_podcast = _is_podcast(existing["title"])
+                new_is_podcast = _is_podcast(article["title"])
+                should_replace = (
+                    (existing_is_podcast and not new_is_podcast)
+                    or (existing_is_podcast == new_is_podcast
+                        and len(article["title"]) < len(existing["title"]))
+                )
+                if should_replace:
+                    log.info(
+                        f"Dedup: replacing '{existing['title']}' "
+                        f"with '{article['title']}'"
+                    )
+                    kept[seen_idx] = article
+                else:
+                    log.info(
+                        f"Dedup: dropping '{article['title']}' "
+                        f"(duplicate of '{existing['title']}')"
+                    )
+                break
+
+        if not is_dup:
+            seen_normalized.append((norm, len(kept)))
+            kept.append(article)
+
+    removed = len(articles) - len(kept)
+    if removed:
+        log.info(f"Deduplication removed {removed} duplicate article(s)")
+    return kept
+
+
 def collect_recent_articles(feeds: list[dict], days: int = 7) -> list[dict]:
     """Fetch all feeds and return articles published in the last N days."""
     cutoff = datetime.now() - timedelta(days=days)
@@ -136,6 +210,8 @@ def collect_recent_articles(feeds: list[dict], days: int = 7) -> list[dict]:
 
     articles.sort(key=lambda a: a.get("published_iso", ""), reverse=True)
     log.info(f"Found {len(articles)} articles from the past {days} days")
+
+    articles = _deduplicate_articles(articles)
     return articles
 
 
@@ -181,12 +257,43 @@ Return ONLY valid JSON, no markdown fences or other text."""
     return json.loads(text)
 
 
+TOPIC_TAGS = [
+    "AI Strategy",
+    "AI Tools",
+    "Product Growth",
+    "PLG",
+    "Org Design",
+    "Hiring",
+    "Discovery",
+    "Positioning",
+    "Leadership",
+    "Dev Tools",
+    "Design",
+    "Market Trends",
+    "Enterprise",
+    "Roadmapping",
+    "Metrics",
+    "Competitive Strategy",
+    "Platform Strategy",
+    "Agentic",
+    "Startups",
+    "Creator Economy",
+]
+
+
 def generate_ranking(
     client: anthropic.Anthropic,
     model: str,
     articles: list[dict],
-) -> list[dict]:
-    """Rank articles by strategic relevance using Claude."""
+) -> dict:
+    """Rank articles by strategic relevance using Claude.
+
+    Returns a dict with:
+    - "weekly_headline": one punchy sentence framing the week
+    - "weekly_overview": 90-140 word editorial paragraph
+    - "weekly_themes": list of 3-5 short theme bullets
+    - "articles": ranked list of article dicts with tags
+    """
     articles_text = ""
     for i, a in enumerate(articles):
         articles_text += (
@@ -194,6 +301,8 @@ def generate_ranking(
             f"{a.get('author', 'Unknown')}, {a.get('date', '')})\n"
             f"Summary: {a['summary']}\n"
         )
+
+    tags_list = ", ".join(TOPIC_TAGS)
 
     prompt = f"""You are helping a VP of Product at a Series C venture-funded B2B SaaS startup prioritize their weekly reading.
 
@@ -207,14 +316,23 @@ Rank ALL articles by strategic relevance to this leader's priorities:
 - Enterprise product management
 - Strategic planning and roadmapping
 
-Return a JSON array where each element has:
-- "index": the original article index number
-- "rank": 1 = most relevant
-- "relevance": A single phrase explaining why this matters to a VP of Product
-- "must_read": boolean, true only for the top 3 most actionable articles
-- "expanded_summary": ONLY for the top 3 must-read articles, provide a 3-4 sentence expanded summary that gives a VP enough context to understand the core argument and why it matters without reading the full article. For non-must-read articles, omit this field.
+Return a JSON object with these fields:
 
-Sort by rank (1 first). Return ONLY valid JSON, no markdown fences or other text."""
+1. "weekly_headline": One punchy sentence that frames the week for senior product leaders. Not a summary — a thesis.
+
+2. "weekly_overview": A single paragraph of 90–140 words. Synthesize this week's articles into an editorial summary. Identify the 2–4 biggest recurring themes, explain the key tension or shift, and make clear why it matters for PMs. Sound like an editor, not a summarizer. Avoid article-by-article recap, hype, clichés, and vague statements. Use short, concrete language.
+
+3. "weekly_themes": An array of 3–5 short bullet-point strings (each on its own line in the array). Each should name a theme and add a brief observation (e.g. "AI tooling is moving from demo to deployment — and PMs are expected to own the integration"). NOT tags — these are editorial observations.
+
+4. "articles": A JSON array where each element has:
+   - "index": the original article index number
+   - "rank": 1 = most relevant
+   - "relevance": A single phrase explaining why this matters to a VP of Product
+   - "must_read": boolean, true only for the top 3 most actionable articles
+   - "expanded_summary": ONLY for the top 3 must-read articles, provide a 3-4 sentence expanded summary. For non-must-read articles, omit this field.
+   - "tags": An array of 1-2 topic tags from this list: [{tags_list}]. If nothing fits well, you may create ONE new tag per article. Keep tags concise (1-2 words).
+
+Sort articles by rank (1 first). Return ONLY valid JSON, no markdown fences or other text."""
 
     log.info(f"Ranking {len(articles)} articles...")
     response = client.messages.create(
@@ -324,12 +442,24 @@ def build_feed_homepage_map(feeds: list[dict]) -> dict[str, str]:
 
 def format_digest(
     articles: list[dict],
-    ranking: list[dict],
+    ranking_result: dict,
     week_start: str,
     week_end: str,
     feeds: list[dict] | None = None,
 ) -> str:
     """Format the ranked digest as markdown."""
+    # Support both old list format and new dict format
+    if isinstance(ranking_result, list):
+        ranked_articles = ranking_result
+        weekly_headline = ""
+        weekly_overview = ""
+        weekly_themes: list[str] = []
+    else:
+        ranked_articles = ranking_result.get("articles", [])
+        weekly_headline = ranking_result.get("weekly_headline", "")
+        weekly_overview = ranking_result.get("weekly_overview", "")
+        weekly_themes = ranking_result.get("weekly_themes", [])
+
     feed_counts = {}
     for a in articles:
         name = a.get("feed_name", "Unknown")
@@ -342,17 +472,31 @@ def format_digest(
         "",
     ]
 
+    # Weekly overview section
+    if weekly_overview:
+        lines.extend(["---", "", "## This Week", ""])
+        if weekly_headline:
+            lines.extend([f"**{weekly_headline}**", ""])
+        lines.extend([weekly_overview, ""])
+        for theme in weekly_themes:
+            lines.append(f"- {theme}")
+        if weekly_themes:
+            lines.append("")
+
     # Must-reads — expanded treatment
-    must_reads = [r for r in ranking if r.get("must_read")]
+    must_reads = [r for r in ranked_articles if r.get("must_read")]
     if must_reads:
         lines.extend(["---", "", "## Must-Read", ""])
         for r in must_reads:
             a = articles[r["index"]]
             title_link = f"[{a['title']}]({a['url']})" if a.get("url") else a["title"]
+            tags = r.get("tags", [])
+            tags_str = "  ".join(f"`#{t}`" for t in tags)
             summary = r.get("expanded_summary") or a["summary"]
             entry = [
                 f"### {r['rank']}. {title_link}",
-                f"*{a.get('feed_name', '')}* — {a.get('author', '')} — {a.get('date', '')}",
+                f"*{a.get('feed_name', '')}* — {a.get('author', '')} — {a.get('date', '')}"
+                + (f"  {tags_str}" if tags_str else ""),
                 "",
                 summary,
                 "",
@@ -371,15 +515,18 @@ def format_digest(
             lines.extend(entry)
 
     # All other articles
-    non_must_reads = [r for r in ranking if not r.get("must_read")]
+    non_must_reads = [r for r in ranked_articles if not r.get("must_read")]
     if non_must_reads:
         lines.extend(["## All Articles", ""])
         for r in non_must_reads:
             a = articles[r["index"]]
             title_link = f"[{a['title']}]({a['url']})" if a.get("url") else a["title"]
             date = a.get("date", "")
+            tags = r.get("tags", [])
+            tags_str = "  ".join(f"`#{t}`" for t in tags)
             entry = [
-                f"**{r['rank']}.** {title_link} — *{a.get('feed_name', '')}*{' · ' + date if date else ''}",
+                f"**{r['rank']}.** {title_link} — *{a.get('feed_name', '')}*{' · ' + date if date else ''}"
+                + (f"  {tags_str}" if tags_str else ""),
                 "",
                 a["summary"],
                 "",
@@ -395,6 +542,21 @@ def format_digest(
 def _md_links(text: str) -> str:
     """Convert markdown [text](url) links to HTML <a> tags."""
     return re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
+
+
+def _render_tag_pills(text: str) -> tuple[str, str]:
+    """Extract `#Tag` pills from text and return (clean_text, pills_html)."""
+    tags = re.findall(r"`#([^`]+)`", text)
+    clean = re.sub(r"\s*`#[^`]+`", "", text).strip()
+    if not tags:
+        return clean, ""
+    pills = " ".join(
+        f'<span style="display:inline-block;background:#F0ECFF;color:#5B3FD6;'
+        f'font-size:11px;font-weight:500;padding:2px 8px;border-radius:10px;'
+        f'margin-left:6px;">#{t}</span>'
+        for t in tags
+    )
+    return clean, pills
 
 
 def markdown_to_html(md: str) -> str:
@@ -460,11 +622,17 @@ def markdown_to_html(md: str) -> str:
             continue
 
         # --- Section headers ---
+        if stripped == "## This Week":
+            section = "this_week"
+            continue
+
         if stripped == "## Must-Read":
+            if section == "this_week":
+                section = None
             section = "must_read"
             html.append(
                 '<h2 style="font-size:13px;text-transform:uppercase;'
-                'letter-spacing:1.5px;color:#5B3FD6;margin:0 0 20px;'
+                'letter-spacing:1.5px;color:#5B3FD6;margin:32px 0 20px;'
                 'font-weight:700;">Must-Read</h2>'
             )
             continue
@@ -479,6 +647,32 @@ def markdown_to_html(md: str) -> str:
                 '<h2 style="font-size:13px;text-transform:uppercase;'
                 'letter-spacing:1.5px;color:#7B7F8E;margin:0 0 20px;'
                 'font-weight:700;">All Articles</h2>'
+            )
+            continue
+
+        # ====== This Week overview section ======
+        if section == "this_week":
+            # Headline: **bold text**
+            if stripped.startswith("**") and stripped.endswith("**"):
+                headline = stripped[2:-2]
+                html.append(
+                    f'<p style="margin:0 0 12px;font-size:17px;color:#1a1a1a;'
+                    f'font-weight:700;line-height:1.4;">{headline}</p>'
+                )
+                continue
+            # Theme bullets
+            if stripped.startswith("- "):
+                text = stripped[2:]
+                html.append(
+                    f'<p style="margin:0 0 4px;padding-left:16px;font-size:14px;'
+                    f'color:#444;line-height:1.5;">&bull; {text}</p>'
+                )
+                continue
+            # Overview body text
+            text = _md_links(stripped)
+            html.append(
+                f'<p style="margin:0 0 14px;font-size:15px;color:#333;'
+                f'line-height:1.6;">{text}</p>'
             )
             continue
 
@@ -519,12 +713,13 @@ def markdown_to_html(md: str) -> str:
                         )
                 continue
 
-            # Metadata: *Feed — Author — Date*
+            # Metadata: *Feed — Author — Date*  `#Tag1`  `#Tag2`
             if stripped.startswith("*") and not stripped.startswith("**"):
-                text = re.sub(r"\*(.+?)\*", r"\1", stripped)
+                text, pills = _render_tag_pills(stripped)
+                text = re.sub(r"\*(.+?)\*", r"\1", text)
                 html.append(
                     f'<p style="margin:4px 0 12px;font-size:13px;color:#7B7F8E;">'
-                    f'{text}</p>'
+                    f'{text}{pills}</p>'
                 )
                 continue
 
@@ -571,7 +766,7 @@ def markdown_to_html(md: str) -> str:
 
         # ====== All Articles section ======
         if section == "all_articles":
-            # Article header: **4.** [Title](url) — *Feed* · Date
+            # Article header: **4.** [Title](url) — *Feed* · Date  `#Tag1`  `#Tag2`
             if (
                 stripped.startswith("**")
                 and ".**" in stripped
@@ -583,9 +778,10 @@ def markdown_to_html(md: str) -> str:
                 html.append(
                     '<div style="padding:16px 0;border-bottom:1px solid #F0F0F4;">'
                 )
+                clean_line, pills = _render_tag_pills(stripped)
                 m = re.match(
                     r'\*\*(\d+)\.\*\*\s*\[([^\]]+)\]\(([^)]+)\)\s*—\s*(.*)',
-                    stripped,
+                    clean_line,
                 )
                 if m:
                     rank, t, url, meta = (
@@ -599,14 +795,14 @@ def markdown_to_html(md: str) -> str:
                         f'<a href="{url}" style="color:#5B3FD6;font-size:15px;'
                         f'font-weight:500;text-decoration:none;">{t}</a>'
                         f'<span style="color:#7B7F8E;font-size:13px;"> &mdash; '
-                        f'{meta}</span></p>'
+                        f'{meta}</span>{pills}</p>'
                     )
                 else:
                     # No link or unexpected format — fallback
-                    text = _md_links(stripped)
+                    text = _md_links(clean_line)
                     text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
                     text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", text)
-                    html.append(f'<p style="margin:0 0 4px;">{text}</p>')
+                    html.append(f'<p style="margin:0 0 4px;">{text}{pills}</p>')
                 continue
 
             # Takeaway bullets
@@ -651,6 +847,10 @@ def markdown_to_html(md: str) -> str:
         'text-decoration:none;">Unsubscribe</a>'
         '</td>'
         '</tr></table>'
+        '<p style="margin:12px 0 0;font-size:12px;color:#7B7F8E;">'
+        'Got forwarded this email? '
+        '<a href="{{signup_url}}" style="color:#5B3FD6;font-weight:600;'
+        'text-decoration:none;">Sign up here</a></p>'
         '</div>'
     )
 
@@ -693,7 +893,13 @@ def fetch_audience_contacts(audience_id: str) -> list[str]:
     return emails
 
 
-def send_digest_email(config: dict, digest_content: str, week_range: str) -> None:
+def send_digest_email(
+    config: dict,
+    digest_content: str,
+    week_range: str,
+    *,
+    skip_audience: bool = False,
+) -> None:
     """Send the digest via Resend API."""
     email_config = config.get("digest_email", {})
     if not email_config.get("enabled"):
@@ -716,7 +922,7 @@ def send_digest_email(config: dict, digest_content: str, week_range: str) -> Non
     )
     audience_recipients: set[str] = set()
 
-    if audience_id:
+    if audience_id and not skip_audience:
         try:
             audience_recipients = {
                 r.lower() for r in fetch_audience_contacts(audience_id)
@@ -739,10 +945,12 @@ def send_digest_email(config: dict, digest_content: str, week_range: str) -> Non
 
     # Send individually so each recipient gets a personalized unsubscribe link
     signup_api_url = email_config.get("signup_api_url", "")
+    signup_page_url = email_config.get("signup_page_url", "https://nyxworks.ai/pmpulse/")
     sent = 0
     for recipient in all_recipients:
         unsub_url = f"{signup_api_url}?unsub={recipient}" if signup_api_url else "#"
         personalized_html = html.replace("{{unsub_url}}", unsub_url)
+        personalized_html = personalized_html.replace("{{signup_url}}", signup_page_url)
         params = {
             "from": email_config["from"],
             "to": [recipient],
@@ -754,6 +962,9 @@ def send_digest_email(config: dict, digest_content: str, week_range: str) -> Non
             sent += 1
         except Exception as e:
             log.error(f"Failed to send to {recipient}: {e}")
+        # Resend rate limit: 2 requests/second
+        if sent < len(all_recipients):
+            time.sleep(0.6)
     log.info(f"Digest sent to {sent}/{len(all_recipients)} recipients")
 
 
@@ -846,21 +1057,27 @@ def main():
 
     # Rank and format
     try:
-        ranking = generate_ranking(client, config["model"], articles)
+        ranking_result = generate_ranking(client, config["model"], articles)
     except Exception as e:
         log.warning(f"Failed to rank articles via AI: {e}")
         log.info("Using default chronological ordering instead")
-        ranking = [
-            {"index": i, "rank": i + 1, "relevance": "", "must_read": i < 3}
-            for i in range(len(articles))
-        ]
+        ranking_result = {
+            "weekly_headline": "",
+            "weekly_overview": "",
+            "weekly_themes": [],
+            "articles": [
+                {"index": i, "rank": i + 1, "relevance": "", "must_read": i < 3,
+                 "tags": []}
+                for i in range(len(articles))
+            ],
+        }
 
     today = datetime.now()
     week_start = (today - timedelta(days=7)).strftime("%b %d")
     week_end = today.strftime("%b %d, %Y")
     week_range = f"{week_start} – {today.strftime('%b %d, %Y')}"
 
-    digest_content = format_digest(articles, ranking, week_start, week_end, feeds)
+    digest_content = format_digest(articles, ranking_result, week_start, week_end, feeds)
 
     # Save digest as markdown note
     digest_dir = NOTES_DIR / "Digests"
@@ -886,7 +1103,10 @@ def main():
 
     # Send email (skip if SKIP_EMAIL is set, e.g. for local regen)
     if not os.environ.get("SKIP_EMAIL"):
-        send_digest_email(config, digest_content, week_range)
+        send_digest_email(
+            config, digest_content, week_range,
+            skip_audience=bool(args.to),
+        )
     else:
         log.info("SKIP_EMAIL set — skipping email send")
     log.info("Done.")

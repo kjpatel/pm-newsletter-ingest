@@ -1,0 +1,322 @@
+# PM Pulse: Weekly Digest — Mar 13, 2026
+
+30 articles from 13 feeds | Mar 06 – Mar 13, 2026
+
+---
+
+## This Week
+
+**AI is reshaping the unit economics of software—PMs must choose between building for agents or becoming invisible.**
+
+This week reveals a fundamental shift: AI isn't just a feature anymore; it's rewriting how software gets distributed, priced, and competed against. Three tensions dominate: first, agent-native surfaces (MCP, CLIs, AGENTS.md) are becoming the primary distribution channel, forcing PMs to choose between traditional UI and machine-readable interfaces. Second, AI is simultaneously commoditizing marginal roles while amplifying the leverage of excellent teams—30x productivity gains for AI-native orgs versus invisible restructuring elsewhere. Third, positioning and strategy have become more critical precisely as execution costs collapse; companies with unclear differentiation or poor product discovery will lose months of advantage in weeks. For a Series C SaaS company, the stakes are immediate: investing in agent integrations and fixing discovery/strategy processes now determines whether you capture the AI wave or get squeezed by it.
+
+- Agents are the new distribution layer — software that isn't discoverable by AI agents risks irrelevance in the fastest-growing adoption channel.
+- Strategy and discovery matter more when execution is cheap — weak positioning, unclear differentiation, and broken discovery processes are now existential, not operational, problems.
+- Organizational leverage is nonlinear with AI — small, AI-native teams achieve 30x productivity per engineer; marginal hires disappear; communication overhead collapses. Traditional scaling playbooks break.
+- Positioning and growth compound over time — excellent growth teams own full journeys and remove actual blockages; mediocre teams ship random experiments. The gap widens fast.
+- Even market leaders have no moat — net dollar retention is declining sharply; category leaders can lose market share in months. Complacency is lethal.
+
+---
+
+## Must-Read
+
+### 1. [The PM's Guide to Agent Distribution: MCP Servers, CLIs, and AGENTS.md](https://www.news.aakashg.com/p/master-ai-agent-distribution-channel)
+*Product Growth* — Aakash Gupta — Mar 07, 2026  `#Agentic`  `#Platform Strategy`
+
+AI agents are rapidly becoming the primary distribution mechanism for software, and product teams that don't build agent-accessible surfaces (AGENTS.md, CLIs, MCP servers) risk invisibility in the fastest-growing software market. This shift represents a fundamental change in how users interact with products—not through traditional UIs, but through machine-readable interfaces that agents navigate autonomously. For a Series C SaaS company, this means immediate decisions about product architecture: does your API surface support agent discovery and integration? Can autonomous agents invoke your core features? This is no longer a nice-to-have feature; it's a distribution and survival requirement.
+
+**Why it matters**: Core strategic imperative: AI agents are becoming the dominant software distribution channel—building agent-accessible surfaces is now table stakes, not optionality.
+
+- **Prioritize API quality first** - Your API is the foundation for all agent-accessible layers; broken authentication or poor design will undermine MCP servers and CLIs.
+- **Start with AGENTS.md documentation** - Create machine-readable documentation with executable commands, code examples, and clear boundaries before building CLIs or MCP servers.
+- **Build CLIs as composable wrappers** - Develop CLI tools that pipe JSON output and use environment variable auth, which agents can use natively and developers already understand.
+- **Invest in high-quality MCP servers** - Write precise tool descriptions, set clear boundaries on capabilities, and test with multiple AI clients to ensure agents reliably select the right tools.
+- **Monitor agent-specific metrics** - Track which agent tools agents actually select, measure error rates per tool, and iterate based on agent behavior rather than human usage patterns.
+
+[Read article →](https://www.news.aakashg.com/p/master-ai-agent-distribution-channel)
+
+---
+
+### 2. [How to Build Product Strategy in the Age of AI: Step-by-Step with Claude Code](https://www.news.aakashg.com/p/ai-product-strategy-2026)
+*Product Growth* — Aakash Gupta — Mar 09, 2026  `#AI Strategy`  `#Roadmapping`
+
+With AI dramatically lowering feature development costs, product strategy has shifted from a nice-to-have to the core competitive advantage. The article presents a 7-step framework for building AI-era product strategies while warning against common pitfalls: vague, overly long, or operationally disconnected strategy documents. Poor strategy execution becomes instantly visible when teams can ship features in days instead of months—bad positioning, unclear differentiation, and misaligned roadmaps now compound into existential problems rather than gradual drag. Series C companies must audit their strategy docs immediately: are they clear on which problems to solve for which customers? Are they grounded in differentiation that can't be commodity-fied by incumbents? Are they actually guiding daily prioritization?
+
+**Why it matters**: Product strategy is now the moat—as AI reduces execution costs, strategy clarity, differentiation, and roadmap discipline separate winners from the squeezed middle.
+
+- **Establish the 30-second test**: Your strategy should be so clear that any engineer or designer can explain it in 30 seconds and use it to make daily decisions—if they can't, you have a document, not a strategy.
+- **Avoid the four failure patterns**: Keep strategies concise (not 15 pages), specific with real tradeoffs (not vague agreements), operationally connected (referenced in daily work), and dynamic (updated as you learn, not annually).
+- **Use AI as a thinking partner, not a replacement**: While Claude Code and MCP can help synthesize research and stress-test assumptions, they can't replace the strategic judgment built from CEO alignment, feature learnings, and customer insights.
+- **Focus on direction over tickets**: With engineers now 10x more productive via Claude Code and Cursor, teams need strategic clarity on what problems to solve and why, not more micro-tasks.
+
+[Read article →](https://www.news.aakashg.com/p/ai-product-strategy-2026)
+
+---
+
+### 3. [What Excellent Growth Teams See That Others Miss](https://lg.substack.com/p/what-excellent-growth-teams-see-that)
+*The Looking Glass* — Julie Zhuo (featuring Brian Hale) — Mar 11, 2026  `#Product Growth`  `#Org Design`
+
+Structural differences separate excellent growth teams from adequate ones, and these distinctions compound to unlock orders-of-magnitude growth differences. Excellent teams own entire customer journeys rather than optimizing isolated metrics in a funnel, they remove actual blockages instead of shipping random feature experiments, and they prioritize deep understanding and insight density over pure experiment velocity. Most teams mistake motion for progress—running dozens of shallow experiments without solving core user problems. For a Series C SaaS company, this means auditing your growth organization: do your growth leads own end-to-end journeys or just funnel slices? Are you diagnosing and fixing actual friction, or treating symptoms? Is your team spending time on insight generation or just running fast tests?
+
+**Why it matters**: Growth framework clarity: excellent teams own full customer journeys and remove blockages; mediocre teams optimize isolated funnels and ship random experiments. The gap widens exponentially.
+
+- **Own the complete journey**: Stop measuring growth at signup or handoff points—obsess over every step from acquisition through value delivery to identify where real customers actually get stuck.
+- **Diagnose before optimizing**: Invest in understanding where friction genuinely exists for users before shipping experiments; fewer high-conviction tests based on data beat dozens of random changes.
+- **Focus on relationships over activity**: Measure new user acquisition (MAU) rather than power user activity to avoid collective blindness; remember that every power user started as a first-time user.
+- **Compound wins ruthlessly**: When an experiment significantly outperforms expectations, slow down to understand why and apply that lesson systematically across the product rather than moving to the next test.
+- **Hire growth leaders who challenge you**: Recruit senior growth people who interrogate your strategy and push back on assumptions, not yes-people who simply want the job.
+
+[Read article →](https://lg.substack.com/p/what-excellent-growth-teams-see-that)
+
+---
+
+## All Articles
+
+**4.** [5 Ways Product Discovery Breaks Down (part 1)](https://itamargilad.com/discovery-problems/) — *Itamar Gilad* · Mar 10, 2026  `#Discovery`  `#Roadmapping`
+
+Product discovery—the process of identifying and validating product opportunities and solutions—often fails in companies due to systemic implementation problems, with five key issues including the creation of 'must-have' feature tracks that bypass discovery and unclear goals that weaken evaluation.
+
+- **Eliminate dual-track systems** by treating 'must-have features' as rare exceptions and moving most product ideas through discovery to reduce waste and improve business outcomes.
+- **Demonstrate business value** of product discovery to stakeholders by quantifying costs of failed features in dollars and person-weeks, and show how evidence-guided decisions outperform opinion-based planning.
+- **Share discovery progress** with managers and stakeholders through tools like GIST boards to build trust, provide transparency, and help them understand that validation reduces risk.
+- **Set clear, measurable team outcomes** rather than relying on output roadmaps and feature lists, so teams can effectively evaluate and prioritize ideas against defined success metrics.
+- **Transition gradually** using hybrid approaches like Now/Next/Later roadmaps as interim steps, but avoid getting stuck there—work toward outcome-based roadmaps instead of output-based planning.
+
+**5.** [A guide to advanced B2B positioning](https://www.lennysnewsletter.com/p/a-guide-to-advanced-b2b-positioning) — *Lenny's Newsletter* · Mar 10, 2026  `#Positioning`  `#Enterprise`
+
+April Dunford provides a guide to navigating advanced B2B positioning challenges by identifying four common roadblocks—disagreement about competitors, product pessimism, poorly defined differentiation, and unclear positioning targets—and offering practical strategies to overcome each one.
+
+- **Align on competitor perspective**: Get all cross-functional teams (marketing, product, sales, founders) to agree on the prospect's view of competition by asking 'If we didn't exist, what would they do?' rather than letting each department's biases dominate.
+- **Reframe product weaknesses as strengths**: Actively document and reposition perceived product limitations as valuable differentiators by understanding why customers chose your solution despite these constraints.
+- **Define differentiation with customer language**: Ground your positioning in specific, measurable customer outcomes and use actual customer language rather than internal jargon to clearly communicate what makes you different.
+- **Clarify your positioning target audience**: Be explicit about who you're positioning to and against, ensuring the entire company understands which customer segments and competitors are in scope versus out of scope for your positioning strategy.
+
+**6.** [The Org Chart Math Behind AI-Native Speed](https://www.tomtunguz.com/communication-tax-small-orgs/) — *Tomasz Tunguz* · Mar 10, 2026  `#AI Strategy`  `#Org Design`
+
+AI-native startups achieve 30x productivity gains per engineer and dramatically reduce organizational communication overhead, enabling smaller teams to match the output of traditional companies while maintaining faster iteration speeds.
+
+- **Measure productivity multipliers, not percentages**: AI-enabled engineers shipping 20-30 PRs daily represent 30x improvements over traditional 3 PRs/week baselines—track compounding gains at the company level where AI startups generate $2-5M revenue per employee versus $200-300k for traditional SaaS.
+- **Flatten org structures to exploit AI advantages**: A 150-person traditional organization creates 11,175 communication channels; an AI-enabled equivalent needs only 30 people with 435 channels—redesign teams around AI agent orchestration rather than human span-of-control limits.
+- **Prioritize R&D adoption first**: Coding and technical work see fastest AI ROI since human communication becomes the bottleneck; focus initial AI integration on areas where humans oversee multiple AI agents rather than managing humans.
+
+**7.** [This CPO Uses Claude Code to Run his Entire Work Life | Dave Killeen, Field CPO @ Pendo](https://www.news.aakashg.com/p/dave-killeen-podcast) — *Product Growth* · Mar 11, 2026  `#AI Tools`  `#Dev Tools`
+
+Dave Killeen, a Field CPO at Pendo, demonstrates how he uses Claude Code to automate his entire work life—from daily planning to career management—by connecting multiple data sources through MCP servers and creating a persistent, compounding knowledge system that eliminates context switching and manual assembly.
+
+- **Create a daily plan command** that pulls calendar, CRM, priorities, and intelligence digests through a single slash command to eliminate 30 minutes of daily tab-switching and context loss.
+- **Connect every available API and tool via MCP servers** rather than raw APIs, as MCP provides guardrails that ensure consistent, deterministic results across integrations like calendars, Slack, and meeting notes.
+- **Build a compounding markdown file system** where meeting notes, stakeholder updates, and project information automatically append to relevant entity pages, creating a persistent knowledge base that grows smarter over time.
+- **Use hooks to inject context automatically** at the start of each session with weekly priorities, quarterly goals, and past mistakes, so Claude never starts from scratch and avoids repeating errors.
+- **Distinguish between skills (flexible instructions), MCP servers (structured guardrails), and hooks (persistent triggers)** to determine whether each workflow element needs adaptability or consistency.
+
+**8.** [The Guide to Claude Code for PMs](https://www.productcompass.pm/p/claude-code-guide) — *Product Compass* · Mar 08, 2026  `#AI Tools`  `#Dev Tools`
+
+Claude Code is an extension of the Cowork tool that brings AI-assisted development into VS Code, enabling product managers to prototype working software, manage complex codebases, and collaborate with engineers—all without being a developer. The guide demonstrates that Claude Code removes friction between idea and execution by providing familiar features from Cowork plus powerful engineering-specific tools like git integration, auto-memory, and plan mode.
+
+- **Install VS Code and the Claude Code extension** in five straightforward steps—download VS Code, add the extension, connect your Anthropic account, open your existing Cowork folder, and you're ready to work with 70% of your knowledge already in place.
+- **Use Plan Mode (Shift+Tab) before making changes** to analyze requests and get approval before Claude modifies your codebase, making it safe for PMs to explore and prototype without breaking existing work.
+- **Leverage Auto Memory across sessions** by letting Claude automatically save patterns and preferences to MEMORY.md per workspace, eliminating the need for manual workarounds and enabling consistent decision-making across projects.
+- **Prototype working features instead of writing specs** to move directly from PRD to demo in a single session, then push to git branches and create PRs—replacing the traditional handoff to engineering.
+- **Monitor context usage with /context visualization** and use /compact to compress conversations when context exceeds 50%, ensuring Claude maintains thinking quality throughout longer sessions.
+
+**9.** [The Sword of Damocles in Software](https://www.tomtunguz.com/software-ndr-decline-2026/) — *Tomasz Tunguz* · Mar 07, 2026  `#Market Trends`  `#Competitive Strategy`
+
+Simple software products with strong early market positions face existential threats from AI competition and commoditization, with net dollar retention declining sharply in 2026 and the weakest quartile now contracting or near breakeven. Even category leaders like GitHub Copilot can lose significant market share in months, indicating no company in software is truly safe.
+
+- **Monitor NDR trends quarterly** - Net dollar retention is the leading indicator of product vulnerability; watch for the 25th percentile as the canary in the coal mine for broader market shifts.
+- **Identify simplifiable products** - Products with simple, replicable workflows (like task management or video conferencing) are most vulnerable to AI agents and commoditized alternatives; add defensible complexity or risk 4%+ annual revenue decay.
+- **Accelerate land-and-expand before AI commoditizes** - With SMB spending contracting and AI competition intensifying, companies need 13%+ new customer acquisition growth just to offset declining retention; focus on upsell velocity now.
+- **Build AI-native moats fast** - The 6-month collapse of Copilot's market leadership proves first-mover advantage is no longer durable; differentiate via proprietary data, workflow integration, or agent capabilities rather than feature parity.
+- **Watch for the contraction cascade** - Bottom quartile products (Zoom at 98%, Asana at 96% NDR) will accelerate into negative growth; this creates M&A opportunities but also signals which categories are being permanently disrupted.
+
+**10.** [The Marginal Hire](https://www.tomtunguz.com/marginal-hire/) — *Tomasz Tunguz* · Mar 11, 2026  `#AI Strategy`  `#Hiring`
+
+AI tools are eliminating the need for marginal hires, causing tech job openings to reset to a lower baseline as companies maintain flat headcount instead of adding planned positions. This invisible restructuring will eventually force dramatic organizational changes when economic pressures mount.
+
+- **Recognize the shift**: Tech job openings are down 45% from 2022 peaks despite recent 16% growth, signaling a fundamental reset in hiring practices rather than a recovery to previous levels.
+- **Plan for AI-enabled productivity**: Teams are now shipping with existing headcount by leveraging AI tools like Cursor, Claude Code, and Copilot to close capability gaps instead of hiring additional engineers.
+- **Prepare for sudden restructuring**: Companies avoiding dramatic layoffs now will face compressed timelines for organizational changes—transitions that once took 5 years will happen in a single quarter when economic pressure hits.
+- **Monitor invisible headcount changes**: The real impact isn't visible in announcements; it's accumulating through unposted job openings and declined offers, making proactive workforce planning essential.
+
+**11.** [TBM 410: Dancing With Problems](https://cutlefish.substack.com/p/tbm-410-dancing-with-problems) — *The Beautiful Mess* · Mar 11, 2026  `#Leadership`  `#Roadmapping`
+
+Effective problem-solving in product requires moving fluidly between multiple layers of analysis—from concrete symptoms to strategic impact—rather than settling on a single "root cause," as different perspectives reveal different truths about the same problem.
+
+- **Move between abstraction layers** when analyzing problems: jump from descriptive (what's happening today) to exploratory (what questions should we ask) to strategic (why does this matter) to catch blind spots that single-layer thinking misses.
+- **Match your problem articulation to your audience's mandate level**: some stakeholders need concrete specifications, others need behavioral insights, and still others need business outcomes—using the wrong level creates misalignment and poor decisions.
+- **Test causal chains across multiple dimensions** before declaring a root cause: a solution that looks solid at the behavioral layer (remove form fields) may create problems at the ecosystem layer (shifts burden downstream) or strategic layer (fails to improve planning).
+- **Recognize that different actors legitimately see different problems** based on their role and time horizon: engineering sees implementation constraints, leadership sees strategic outcomes, and users see daily friction—all are valid and need integration.
+- **Embrace the discomfort of ambiguity** rather than rushing to a false root cause: the best diagnoses require holding multiple perspectives simultaneously and resisting the urge to over-simplify until you've tested assumptions across layers.
+
+**12.** [From Figma to Claude Code and back | Gui Seiz & Alex Kern (Figma)](https://www.lennysnewsletter.com/p/from-figma-to-claude-code-and-back) — *Lenny's Newsletter* · Mar 11, 2026  `#AI Tools`  `#Design`
+
+Figma engineers Gui Seiz and Alex Kern demonstrate how AI-powered tools like Claude Code and Figma's MCP enable a bidirectional design-to-code workflow, eliminating linear waterfall processes and allowing designers and engineers to collaborate in real time with AI handling the middle execution layer.
+
+- **Use Figma's MCP to pull production code directly into design files** – This enables designers to work with actual running code rather than outdated static files, creating a single source of truth for design and engineering collaboration.
+- **Push design changes back to code with Claude Code** – Leverage AI to automatically convert Figma design updates into code without manual CSS adjustments, eliminating the tedious handoff process.
+- **Shift design work upstream to planning and downstream to craft** – AI eliminates the rushed middle execution phase, freeing designers to focus on higher-level planning and pixel-perfect craft rather than repetitive implementation work.
+- **Structure your codebase for AI to write 90% of code** – Organize code in ways that enable AI tools to understand and generate code more effectively, reducing manual engineering effort.
+- **Automate pre-flight checks and CI monitoring with custom skills** – Create AI-powered automation for linting, testing, and deployment validation before code reaches production.
+
+**13.** [Nano Banana 2: The PM’s Playbook 🍌](https://www.news.aakashg.com/p/nano-banana-2-the-pms-playbook) — *Product Growth* · Mar 12, 2026  `#AI Tools`  `#Product Growth`
+
+Google's Nano Banana 2 image generation model has reached practical viability for PMs, answering key questions about real-world applications and product integration of image generation capabilities.
+
+- **Evaluate practical viability**: Determine whether image generation has moved from experimental toy to production-ready tool for your specific PM workflows and use cases.
+- **Assess product integration**: Decide if adding image generation capabilities to your product is now feasible and valuable, considering the recent technological shifts that have made it viable.
+- **Monitor model rankings**: Track which image generation models are performing best (#1 status indicators) to stay informed on the most capable and reliable options for implementation.
+
+**14.** [Deep: Homepage UX Explored](https://departmentofproduct.substack.com/p/deep-homepage-ux-explored) — *Department of Product* · Mar 09, 2026  `#Positioning`  `#Design`
+
+This Deep Dive analysis explores how leading tech companies are redesigning their homepages in 2026 to reflect AI's transformation of their value propositions, examining over 20 examples with detailed breakdowns of components, hero headlines, CTAs, and design patterns. The article reveals emerging trends in homepage design driven by AI tools, new interactive components, and strategic shifts in how companies position their offerings.
+
+- **Analyze hero headlines strategically** - Study the exact wording, punctuation, and casing of top companies' homepage headlines (like Notion's "Meet the night shift" vs Granola's "get the doing done") to understand how language choices reflect different positioning and value propositions for your own product.
+- **Evaluate CTA optimization approach** - Determine whether your primary call-to-action buttons should prioritize conversion volume with low-friction sign-ups (e.g., "Get started free") or qualification-focused options (e.g., "Download for MacOS") based on your business model and target audience.
+- **Implement AI-powered homepage components** - Consider adopting emerging components like AI summary widgets that allow visitors to get instant value propositions in ChatGPT, Claude, or Perplexity to improve user engagement and reduce friction.
+- **Embed interactive product demonstrations** - Use live widgets and embedded product demos (like Linear's approach) that work without requiring sign-up to showcase your product's capabilities directly on the homepage.
+- **Audit authentication and sign-up options** - Review which authentication methods (email, Google, Microsoft, or direct download) are most strategically beneficial for your onboarding process and feature them appropriately on your homepage.
+
+**15.** [One Billion Lost Packages](https://www.tomtunguz.com/backops-theory/) — *Tomasz Tunguz* · Mar 12, 2026  `#Agentic`  `#Market Trends`
+
+BackOps, founded by Sean McCarthy and Henry Ou, uses AI agents to automate logistics and supply chain problem-solving across fragmented systems, addressing the $4 billion annual cost of damaged packages in the U.S.
+
+- **Deploy AI agents to bridge fragmented systems**: BackOps demonstrates how AI can connect legacy warehouse management systems, carrier portals, and communication channels that were never designed to integrate, eliminating the need for hundreds of bespoke integrations.
+- **Automate high-volume repetitive processes at scale**: The platform files 100% of eligible carrier claims automatically and achieves 60% time savings by handling tasks like email reading, portal navigation, and driver calls without human intervention.
+- **Use screen recordings as training data for workflow automation**: BackOps converts employee screen recordings into automated workflows, creating a scalable training method that captures institutional knowledge and problem-solving patterns.
+- **Target fragmentation pain points in supply chain**: With 85 million damaged packages annually costing $4 billion, and a single shipment touching 40-60 processes, supply chain fragmentation represents a massive market opportunity ($3.5B growing 13% annually).
+
+**16.** [Partnering with Scanner: Every Log Tells a Story—If You Can Find It Fast Enough](https://sequoiacap.com/article/partnering-with-scanner-every-log-tells-a-story-if-you-can-find-it-fast-enough/) — *Sequoia Capital* · Mar 10, 2026  `#Agentic`  `#Enterprise`
+
+Scanner, a purpose-built log search engine for object storage, enables security teams to make petabytes of data searchable in seconds, unlocking a new era of AI-driven security operations where autonomous agents can conduct investigations at machine speed.
+
+- **Solve the impossible choice**: Enterprise security teams face a false dilemma between expensive log storage (15% of CISO budgets) and blind spots from archived data; Scanner's inverted index design makes S3-stored logs searchable in seconds instead of hours.
+- **Enable agentic security workflows**: Within weeks of releasing their MCP integration, 80% of Scanner's queries came from AI agents, proving that speed is the critical constraint for autonomous security investigations to scale.
+- **Target technically sophisticated customers first**: Adoption at companies like Notion, Ramp, and Benchling demonstrates product-market fit with cloud-native leaders who immediately expand use cases (security logs → application logs) and see measurable ROI through reduced SIEM costs.
+- **Build infrastructure from first principles**: Founders with production-scale engineering experience (Accompany/Cisco) and obsessive focus on performance can unlock entirely new product categories by reimagining how existing tools would work if designed for modern architectures.
+
+**17.** [The most successful AI company you’ve never heard of | Qasar Younis](https://www.lennysnewsletter.com/p/the-most-successful-ai-company-youve-never-heard-of) — *Lenny's Newsletter* · Mar 08, 2026  `#AI Strategy`  `#Market Trends`
+
+Applied Intuition is a $15 billion AI company building autonomous intelligence for vehicles and heavy machinery—not software—and the next major AI revolution will happen in mining, farming, construction, and trucking, not in consumer tech.
+
+- **Focus on unsexy verticals**: The biggest AI opportunities over the next 5-10 years are in industrial sectors like mining, farming, construction, and trucking rather than consumer software—look for underserved hardware-adjacent markets.
+- **Build in stealth strategically**: Qasar intentionally stayed under the radar for nearly a decade while building Applied Intuition, though he notes most founders shouldn't replicate this approach—consider when visibility helps vs. hurts your mission.
+- **Prioritize company values as operational tools**: Applied Intuition's core values (speed above everything, laugh a lot, half the work is follow-up, never disappoint the customer) directly drive decision-making and hiring—embed values that reinforce your competitive advantage.
+- **Track early traction rigorously**: The most successful companies show measurable traction very early in their lifecycle—use this as a leading indicator of product-market fit rather than waiting for scale.
+- **Read deeply to build taste**: Historical and biographical books develop pattern recognition and judgment far better than contemporary business writing—dedicate time to classics in adjacent domains.
+
+**18.** [2026.11: Winners, Losers, and the Unknown](https://stratechery.com/2026/winners-losers-and-the-unknown/) — *Stratechery* · Mar 13, 2026  `#AI Strategy`  `#Competitive Strategy`
+
+This week's Stratechery overview covers the evolving AI value chain where model makers themselves are winning by best integrating AI capabilities, Microsoft's bundling strategy against Anthropic, and geopolitical implications of the Iran conflict on US-China relations.
+
+- **Prioritize integration over commodities** - AI model providers who can best harness and integrate their own capabilities into products are outperforming those relying on commoditized models alone.
+- **Monitor bundling strategies** - Microsoft's creation of new bundles around Anthropic's integration points shows how companies compete by packaging complementary services rather than individual components.
+- **Track geopolitical ripple effects** - Recent US foreign policy actions, including the Iran conflict, should be analyzed for their cascading effects on US-China competition and global power dynamics.
+- **Evaluate cloud-dependent architecture** - Apple's success with cheaper devices depends on moving critical workloads to cloud services, demonstrating where to invest in software infrastructure.
+- **Watch enterprise incumbents** - Oracle's strong earnings show established software companies can maintain competitive positions by aligning with secular trends like AI adoption in their core markets.
+
+**19.** [Copilot Cowork, Anthropic’s Integration, Microsoft’s New Bundle](https://stratechery.com/2026/copilot-cowork-anthropics-integration-microsofts-new-bundle/) — *Stratechery* · Mar 10, 2026  `#AI Strategy`  `#Competitive Strategy`
+
+Microsoft is attempting to commoditize AI complements through Copilot integrations, but Anthropic has established its own integration point that's valuable enough to warrant Microsoft creating a new bundle around it.
+
+- **Monitor integration strategies** - Track how AI providers like Anthropic create defensible integration points that force competitors to build bundles rather than commoditize them
+- **Bundle as competitive response** - When a complement can't be commoditized, bundling becomes the fallback strategy to maintain market position and control
+- **Integration as moat** - Deep integration capabilities can serve as a stronger competitive advantage than individual feature parity in the AI market
+
+**20.** [Oracle Earnings, Oracle’s Cloud Growth, Oracle’s Software Defense](https://stratechery.com/2026/oracle-earnings-oracles-cloud-growth-oracles-software-defense/) — *Stratechery* · Mar 11, 2026  `#Enterprise`  `#Market Trends`
+
+Oracle's strong earnings results demonstrate the company's ability to capitalize on the AI wave while maintaining a defensible software business position. The earnings reveal Oracle's competitive strength in cloud infrastructure and enterprise software markets.
+
+- **Monitor Oracle's cloud growth** as a key indicator of enterprise AI adoption rates and infrastructure spending patterns in the coming quarters.
+- **Evaluate Oracle's software moat** by tracking customer retention and pricing power in its core database and enterprise software offerings against competitive threats.
+- **Track secular AI tailwinds** benefiting Oracle to understand which legacy enterprise vendors are successfully pivoting to capture AI-driven infrastructure demand.
+
+**21.** [MacBook Neo, The (Not-So) Thin MacBook, Apple and Memory](https://stratechery.com/2026/macbook-neo-the-not-so-thin-macbook-apple-and-memory/) — *Stratechery* · Mar 09, 2026  `#Market Trends`  `#Product Strategy`
+
+Apple's MacBook Neo succeeds as a budget laptop not because of hardware thinness, but because Apple Silicon enables strong performance while cloud-based software has become the primary computing paradigm. The device demonstrates how architectural shifts in computing—moving intelligence to servers rather than local storage—reshape what matters in personal computers.
+
+- **Prioritize cloud-native architecture** when designing budget products; MacBook Neo proves that local hardware constraints matter less when software runs remotely, allowing cost reduction without perceived quality loss.
+- **Rethink the 'thin and light' paradigm** for laptops; the industry obsession with thinness is less important than processor efficiency and cloud integration, opening opportunities to cut costs in other areas.
+- **Leverage platform advantages** like Apple Silicon to deliver disproportionate value at lower price points; the combination of efficient chips and integrated software creates competitive moats that competitors cannot easily replicate.
+
+**22.** [🔵 Claude, Google and the Rise of AI "Brain Fry"](https://departmentofproduct.substack.com/p/claude-google-and-the-rise-of-ai) — *Department of Product* · Mar 13, 2026  `#AI Tools`  `#Leadership`
+
+Major AI releases from Anthropic, Google, and Replit are transforming workplace productivity, but researchers warn that using too many AI tools simultaneously may cause cognitive overload, or 'Brain Fry,' particularly affecting product managers.
+
+- **Evaluate your AI tool stack strategically** - Monitor how many concurrent AI tools your team uses to avoid cognitive overload and 'Brain Fry,' especially given that product managers rank high on susceptibility lists.
+- **Leverage cross-file context in AI assistants** - Adopt Claude's new capability that maintains continuous conversation context across Excel and PowerPoint, eliminating the need to re-explain data at each step.
+- **Shift from linear to parallel agent workflows** - Implement tools like Replit Agent 4 that run multiple AI sub-agents in parallel (auth, database, frontend simultaneously) to maintain creative flow and accelerate development.
+- **Reposition file storage as a searchable knowledge base** - Migrate from traditional file management to Google Drive's new approach where users ask questions and receive summarized answers with citations.
+
+**23.** [Mastering Midjourney: How to create consistent, beautiful brand imagery without complex prompts](https://www.lennysnewsletter.com/p/mastering-midjourney-how-to-create) — *Lenny's Newsletter* · Mar 09, 2026  `#AI Tools`  `#Design`
+
+AI creative director Jamey Gannon shares a streamlined workflow for generating consistent brand imagery using Midjourney and other tools, emphasizing visual references and strategic shortcuts over complex prompts.
+
+- **Start with mood boards** as the foundational step to communicate your desired aesthetic to AI image generation tools before jumping into prompt engineering
+- **Use Style References (SREFs)** instead of general mood boards in Midjourney to achieve more consistent results with less iteration
+- **Develop personalization codes** in Midjourney to create your own unique aesthetic preferences that can be applied across multiple image generations
+- **Combine visual references with minimal prompting** rather than relying on complex text prompts for faster, more reliable brand asset generation
+- **Package your visual system for clients** by documenting your aesthetic codes and reference library so they can independently continue generating on-brand imagery
+
+**24.** [Is This Tomasz's Agent?](https://www.tomtunguz.com/is-this-tomaszs-agent/) — *Tomasz Tunguz* · Mar 08, 2026  `#Agentic`  `#Leadership`
+
+As AI agents become increasingly prevalent, Tomasz reflects on how communication norms are shifting—people now address emails to either him or his agent, and the distinction between human and machine responses is becoming irrelevant to them.
+
+- **Normalize AI responses** by addressing communications to 'you or your agent' rather than assuming human-only interaction, reflecting the new reality of business communication.
+- **Recognize authenticity erosion** when AI can perfectly replicate voice, writing style, and response patterns—the technical ability to verify identity no longer guarantees trust.
+- **Adapt expectations about quality** by accepting that AI customer support may be more responsive and knowledgeable than human support, requiring a mindset shift about what 'good service' means.
+- **Prepare for ambiguity** in knowing whether interactions are with humans or machines, and understand this ambiguity is increasingly becoming the default rather than the exception.
+
+**25.** [How I built a 1M+ subscriber newsletter and top 10 tech podcast | Lenny Rachitsky](https://www.lennysnewsletter.com/p/how-i-built-a-1m-subscriber-newsletter) — *Lenny's Newsletter* · Mar 12, 2026  `#Leadership`  `#Creator Economy`
+
+Lenny Rachitsky shares his personal journey building a 1M+ subscriber newsletter and top 10 tech podcast, discussing the pivotal moments that led him to start, his approach to quality and consistency, and the stress management strategies behind shipping weekly content.
+
+- **Identify collection moments**: Pay attention to the specific moments and converging circumstances that push you toward starting something new, rather than waiting for a single eureka moment.
+- **Test paywall timing strategically**: Know when your audience is ready for monetization by monitoring engagement signals and growth patterns before adding a paywall.
+- **Build sustainable systems**: Create repeatable processes for consistent shipping (newsletter + podcast weekly) that don't require scaling your team or sacrificing quality.
+- **Manage stress through boundaries**: Keep your business intentionally small and establish clear boundaries around work to maintain mental health and prevent burnout.
+- **Share authentic stories**: Open up about vulnerabilities, scariest moments, and personal challenges in your communication to build deeper connections with your audience.
+
+**26.** [Podcast with Phil Carter on Agentic Growth and Bootstrapping a Network](https://www.caseyaccidental.com/p/podcast-with-phil-carter-on-agentic) — *Casey Accidental* · Mar 10, 2026  `#Agentic`  `#Startups`
+
+Casey Winters interviews Phil Carter about SuperMe's founding, growth strategies in an AI-driven world, and lessons learned from bootstrapping a network from scratch.
+
+- **Rethink growth metrics** in an agentic world where traditional user acquisition may be disrupted by AI agents handling tasks autonomously.
+- **Bootstrap strategically** by focusing on core network effects rather than trying to scale all channels simultaneously when building early-stage platforms.
+- **Learn from network failures** by documenting what didn't work when building two-sided or multi-sided networks to avoid repeating mistakes.
+
+**27.** [🧠 Community Wisdom: Business books that haven’t aged well, vibe coding with your Figma design systems, Claude Code vs. other coding tools and more](https://www.lennysnewsletter.com/p/community-wisdom-business-books-that) — *Lenny's Newsletter* · Mar 07, 2026  `#AI Tools`  `#Design`
+
+This Community Wisdom edition curates the most insightful subscriber discussions from Lenny's Slack community, covering topics like outdated business book recommendations, Figma design system strategies, and comparisons between Claude Code and alternative coding tools.
+
+- **Reassess your reading list** by identifying which classic business books no longer apply to modern product development and replace them with current frameworks
+- **Optimize your design systems** by learning how top PMs leverage Figma to create scalable, maintainable component libraries
+- **Evaluate coding tool tradeoffs** by comparing Claude Code against alternatives based on your specific workflow and integration needs
+- **Engage with community intelligence** by participating in peer discussions to surface practical insights faster than solo research
+
+**28.** [An Interview with Robert Fishman About the Current State of Hollywood](https://stratechery.com/2026/an-interview-with-robert-fishman-about-the-current-state-of-hollywood/) — *Stratechery* · Mar 12, 2026  `#Market Trends`  `#Competitive Strategy`
+
+Ben Thompson interviews MoffettNathanson analyst Robert Fishman about the current competitive landscape and strategic positioning of major Hollywood players including Netflix, Paramount, YouTube, Disney, and Amazon.
+
+- **Understand streaming economics** - Analyze how Netflix, Paramount, Disney, and Amazon are competing on content strategy, pricing models, and subscriber growth in an increasingly saturated market.
+- **Monitor competitive shifts** - Track how traditional media companies and tech platforms are reshaping Hollywood's competitive dynamics through different business model approaches.
+- **Evaluate platform differentiation** - Assess how each major player (YouTube, Disney+, Amazon Prime) is differentiating through original content, distribution, and bundling strategies.
+
+**29.** [Write Your Obituary Before Your Resume](https://debliu.substack.com/p/write-your-obituary-before-your-resume) — *Perspectives (Deb Liu)* · Mar 12, 2026  `#Leadership`
+
+Writing your obituary before your resume forces you to optimize for meaning and impact rather than external markers of success, helping you align your daily choices with the life you actually want to lead. This exercise reveals whether you're pursuing motion and prestige or building a life of genuine purpose and autonomy.
+
+- **Write your obituary first**: Spend at least an hour imagining the highlight reel of your life—who matters, what you're proud of, and what themes define you—then use this as your north star for major decisions.
+- **Distinguish between motion and meaning**: Recognize that climbing the career ladder and accumulating titles often feels like progress but may not reflect the legacy you actually want to leave behind.
+- **Zoom out beyond quarterly metrics**: When facing a major decision (career move, family time, risk-taking), ask yourself whether it aligns with your obituary narrative rather than just your next promotion or LinkedIn milestone.
+- **Reflect and revise regularly**: Revisit your written obituary every few years to assess whether your current life trajectory matches your vision, and be willing to abandon the clearly defined path if it no longer serves your values.
+- **Choose autonomy over prescribed paths**: Remember that you are the author of your life story—don't let external expectations or pre-set career trajectories prevent you from actively choosing the narrative you want to create.
+
+**30.** [“Vast wealth of tech billionaires has made many of them unconcerned with the little people’s lives — and deeply unpatriotic.” Is Paul Krugman correct?](https://hunterwalk.com/2026/03/12/vast-wealth-of-tech-billionaires-has-made-many-of-them-unconcerned-with-the-little-peoples-lives-and-deeply-unpatriotic-is-paul-krugman-correct/) — *Hunter Walk* · Mar 12, 2026  `#Market Trends`
+
+Hunter Walk examines whether tech billionaires' insulation from negative consequences of their decisions makes them unconcerned with societal impact, using Paul Krugman's critique as a starting point to question whether the tech elite are increasingly making decisions driven by upside potential while shielded from downside risks.
+
+- **Establish personal redlines**: Define your own ethical boundaries around what you will or won't do for money, particularly in emerging sectors like prediction markets and gambling-adjacent products.
+- **Evaluate downside consequences**: Before pursuing lucrative partnerships or innovations, seriously consider potential negative externalities (e.g., acceleration of gambling addiction, market manipulation) not just legal compliance.
+- **Question insulation from impact**: Recognize that wealth can create dangerous distance from real-world consequences of business decisions; actively work to understand how your products affect vulnerable populations.
+- **Ensure stable ladder foundations**: Remember that sustainable success requires societal stability, not just personal wealth accumulation—prioritize the health of the broader ecosystem over short-term gains.
+
