@@ -4,7 +4,7 @@
   "model": "claude-haiku-4-5-20251001",
   "digest_email": {
     "enabled": true,
-    "from": "PM Digest <pm-newsletter-digest@nyxworks.ai>",
+    "from": "NyxWorks.ai <pm-newsletter-digest@nyxworks.ai>",
     "to": [],
     "resend_audience_id": "0dc8b5fd-8675-464a-ae3a-ebe6fec9c42c",
     "signup_api_url": "https://t4e6r6lqr6qhlzlyflzrvjxamy0silww.lambda-url.us-west-2.on.aws/"
