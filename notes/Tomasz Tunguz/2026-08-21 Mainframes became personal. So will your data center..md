@@ -1,19 +1,21 @@
 # Mainframes became personal. So will your data center.
 
-**Source**: [Tomasz Tunguz](https://www.tomtunguz.com/intelligence-per-watt/)
+**Source**: [Tomasz Tunguz](https://tomtunguz.com/intelligence-per-watt/)
 **Author**: Tomasz Tunguz | **Date**: Aug 21, 2026
 
 ---
 
 ## Summary
 
-Local AI models now match frontier cloud models on 89% of everyday queries while delivering 5.3x better efficiency per watt, mirroring how mainframes became personal computers and suggesting data centers will similarly decentralize to edge devices.
+Local AI models now match frontier cloud models on 89% of everyday queries while consuming 80% less energy, paralleling how mainframes became personal computers through efficiency gains—suggesting data centers will similarly become localized as intelligence-per-watt improvements continue.
 
 ## Key Takeaways
 
-- **Route queries intelligently**: Use local model routers to direct each query to the best-suited model from 20+ options, achieving 90% parity with frontier models while cutting energy 80%, compute 77%, and costs 74%.
-- **Prioritize efficiency over raw capability**: Intelligence-per-watt improvements (5.3x in two years) matter more than peak performance for most everyday knowledge work that doesn't require cloud-scale reasoning.
-- **Reserve cloud for complex workloads**: Cloud infrastructure remains essential for multi-step reasoning, technical domains, and parallelized tasks, but shouldn't be used for routine queries that local hardware handles equally well.
+- **Deploy local models for routine tasks**: Local AI can handle 89% of everyday chat and reasoning queries as effectively as frontier cloud models, making on-device inference viable for most knowledge work.
+- **Prioritize efficiency metrics**: Intelligence-per-watt has improved 5.3x in two years through better models (3.1x) and better chips (1.7x)—track this metric to guide infrastructure decisions as it did for the mainframe-to-PC transition.
+- **Use smart routing between models**: Routing queries to the best-suited model from a diverse set of 20+ local options achieves ~90% accuracy against frontier models, beating any single local model by 16-28 percentage points.
+- **Reserve cloud for complex workloads**: Keep cloud inference for long multi-step reasoning, specialized technical domains, and workloads requiring scale and parallelization where cloud's 40% efficiency advantage matters.
+- **Realize massive cost savings at scale**: An all-local baseline with intelligent routing cuts energy consumption by 80%, compute by 77%, and costs by 74% compared to all-cloud approaches.
 
 ## Related
 

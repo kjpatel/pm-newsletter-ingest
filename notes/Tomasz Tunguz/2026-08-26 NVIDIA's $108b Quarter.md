@@ -1,24 +1,23 @@
 # NVIDIA's $108b Quarter
 
-**Source**: [Tomasz Tunguz](https://www.tomtunguz.com/nvidia-q2-fy27-earnings/)
+**Source**: [Tomasz Tunguz](https://tomtunguz.com/nvidia-q2-fy27-earnings/)
 **Author**: Tomasz Tunguz | **Date**: Aug 26, 2026
 
 ---
 
 ## Summary
 
-NVIDIA's Q2 FY27 revenue reached $96 billion with Q3 guidance at $108 billion, but the company is shifting its revenue mix toward non-hyperscaler customers while extending payment terms and building financial commitments to sustain demand from weaker balance sheet buyers.
+NVIDIA's Q2 FY27 revenue hit $96 billion with a $108 billion Q3 guidance, but the company is increasingly relying on non-hyperscaler customers (AI startups and enterprises) for growth while extending supplier financing terms to support their weaker balance sheets.
 
 ## Key Takeaways
 
-- **Monitor Days Sales Outstanding** - NVIDIA's DSO jumped from 45 to 60 days in a single quarter; watch if it stabilizes or continues climbing next quarter, as sustained increases signal supplier financing pressure on non-hyperscaler customers.
-- **Diversification masks concentration risk** - While NVIDIA celebrates growth from AI startups and enterprises (25% sequential growth) versus hyperscalers (13%), these buyers have weaker balance sheets, increasing credit risk and requiring more vendor financing.
-- **Financial engineering sustains growth** - NVIDIA built a $581 billion stack of supply commitments, power guarantees, leases, and $101 billion in equity stakes in AI startups and neoclouds to fund customers who cannot self-fund their infrastructure buildout.
-- **Custom silicon threat remains real** - The shift to non-hyperscaler revenue sources raises questions about whether Google TPUs, Amazon Trainium, and Meta MTIA will eventually slow Big Tech's NVIDIA demand.
-- **Receivables growth outpacing revenue growth** - Receivables hit $63 billion and grew 64% while revenue grew only 18% sequentially, signaling accelerating customer financing needs to maintain growth momentum.
+- **Monitor Days Sales Outstanding closely** — NVIDIA's DSO jumped from 45 to 60 days in one quarter, signaling extended payment terms to investment-grade customers; watch Q4 results to determine if this is structural credit expansion or a one-time reset.
+- **Hyperscaler custom silicon poses long-term risk** — hyperscale revenue grew only 13% sequentially while ACIE revenue grew 25%, suggesting Google TPUs, Amazon Trainium, and Meta MTIA could eventually reduce Big Tech's chip demand.
+- **NVIDIA is becoming a fintech company** — the company has built $581 billion in supply commitments, power guarantees, leases, and $101 billion of equity stakes in AI startups to fund buyers who cannot self-fund, creating new credit and portfolio risks.
+- **Revenue at scale with questionable quality** — while Q3 guidance annualizes to $432 billion (sixth largest company globally), the shift away from hyperscalers with stronger balance sheets toward startups and neoclouds introduces credit deterioration risk that DSO increases already signal.
 
 ## Related
 
-- [[2026-08-05 Google Earnings, The Frontier Case, Amazon Earnings]]
-- [[2026-08-07 2026.32 Earnings and Learnings]]
-- [[2026-04-13 Mythos, Muse, and the Opportunity Cost of Compute]]
+- [[2026-08-26 NVIDIA's $108b Quarter]]
+- [[2026-04-13 The Beginning of Scarcity in AI]]
+- [[2026-05-20 The Unsustainable Subsidy]]
